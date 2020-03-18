@@ -1,8 +1,7 @@
-import serializer from "data/serializer";
 import makeUser, { UserType } from "@domain/user";
-import UserDatabase from "data/user";
-
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from "typeorm";
+import serializer from "@data/serializer";
+import UserDatabase from "@data/user";
+import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class User extends BaseEntity {
@@ -26,7 +25,7 @@ export class User extends BaseEntity {
 
 const userSerializer = serializer((user: User): UserType => {
     return {
-        id: user.id,
+        id: user.id === undefined ? "0" : user.id.toString(),
         names: user.names,
         email: user.email,
         phone_number: user.phone_number,
@@ -38,7 +37,7 @@ const userSerializer = serializer((user: User): UserType => {
 const userDeserializer = serializer((user: UserType): User => {
     const passedUser = makeUser(user)
     const newUser = new User();
-    newUser.id = Number.parseInt(user.id)
+    newUser.id = undefined
     newUser.names = passedUser.names
     newUser.email = passedUser.email
     newUser.phone_number = passedUser.phone_number
@@ -51,14 +50,14 @@ export default class MysqlUserDatabase implements UserDatabase {
     deleteUser(id: string): Promise<boolean> {
         return new Promise<boolean>((resolve, reject) => {
             return User.delete(id)
-                .then(resp => resolve(true))
+                .then(_ => resolve(true))
                 .catch(err => reject(err))
         })
     }
 
     deleteAllUsers(): Promise<boolean> {
         return new Promise<boolean>((resolve, reject) => {
-            User.clear().then(res => resolve(true))
+            User.clear().then(_ => resolve(true))
                 .catch(err => reject(err))
         })
     }
@@ -78,7 +77,7 @@ export default class MysqlUserDatabase implements UserDatabase {
             }
             User.find({ [prop]: val })
                 .then(resp => {
-                    return userSerializer(resp[0])
+                    resolve(userSerializer(resp[0]))
                 }).catch(err => reject(err))
         })
     }
@@ -91,3 +90,4 @@ export default class MysqlUserDatabase implements UserDatabase {
         })
     }
 }
+

@@ -1,19 +1,17 @@
 require('dotenv').config();
-import express from 'express'
+import router from "@ui/router";
+import express, { Response } from 'express';
 
 const app = express()
-const routes = require('./routes')
-const config = require('../../config')
 
 // bodyparser
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
-app.use(routes)
+app.use(router)
 
-// === BOILERPLATE ===
 // Catch and send error messages
-app.use((err, _, res, next) => {
+app.use((err: any, _: any, res: Response, next: Function) => {
   if (err) {
     console.error(err.message)
     if (!err.statusCode) {
@@ -29,7 +27,7 @@ app.use((err, _, res, next) => {
 })
 
 // 404
-app.use((_, res) => {
+app.use((_, res: Response) => {
   res.status(404).json({
     status: 'Page does not exist'
   });

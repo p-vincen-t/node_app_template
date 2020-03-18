@@ -1,8 +1,8 @@
 import "reflect-metadata";
+import MysqlUserDatabase, { User } from '@data/mysql/user';
 import { createConnection } from "typeorm";
-import { User } from "@data/mysql/user";
 
-export default createConnection({
+createConnection({
     type: "mysql",
     host: "localhost",
     port: 3306,
@@ -15,3 +15,6 @@ export default createConnection({
     synchronize: true,
     logging: false
 }).catch(error => console.log(error));
+
+
+export const userDatabase = new MysqlUserDatabase()

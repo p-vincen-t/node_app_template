@@ -14,10 +14,11 @@ describe('makeUser', () => {
     ].join('\n')
 
     let user: UserType = {
-        names: 'Vincent Peter',
-        email: 'dev4vin@gmail.com',
-        phone_number: '0700000000',
-        admin: true
+      id: undefined,
+      names: 'Vincent Peter',
+      email: 'dev4vin@gmail.com',
+      phone_number: '0700000000',
+      admin: true
     }
 
     expect(() => {
@@ -26,11 +27,11 @@ describe('makeUser', () => {
   })
   it('must have name', () => {
     let user = makeUser({
-      names: 'howie',
+      names: 'howie', id: undefined, email: "", phone_number: "", admin: false
     })
-    let input = user.getNames()
+    let input = user.names
     let actual = 'howie'
     expect(input).to.equal(actual)
   })
-  
+
 })
