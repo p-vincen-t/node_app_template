@@ -1,9 +1,9 @@
 import { userDatabase } from "@data/index"
 import { Router } from 'express'
 
-const router = Router()
+const userRouter = Router()
 
-router.get('/users', (_, res, next) => {
+userRouter.get('/users', (_, res, next) => {
     userDatabase.findUsers().then(users => {
         res.status(200).send({
             payload: users
@@ -11,4 +11,4 @@ router.get('/users', (_, res, next) => {
     }).catch(err => next(err))
 })
 
-export default router
+export default userRouter
