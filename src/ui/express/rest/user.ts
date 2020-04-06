@@ -1,9 +1,10 @@
 import { userDatabase } from "@data/index"
-import { Router } from 'express'
+import { Router, Response, NextFunction } from 'express'
 
 const userRouter = Router()
 
-userRouter.get('/users', (_, res, next) => {
+userRouter.get('/users', (_, res: Response, next: 
+    NextFunction) => {
     userDatabase.findUsers().then(users => {
         res.status(200).send({
             payload: users

@@ -1,4 +1,4 @@
-import makeUser, { UserType } from "@domain/user";
+import makeUser, { UserType, VALIDATOR_SCENARIOS } from "@domain/user";
 import serializer from "@data/serializer";
 import UserDatabase from "@data/user";
 import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
@@ -35,7 +35,7 @@ const userSerializer = serializer((user: User): UserType => {
 
 
 const userDeserializer = serializer((user: UserType): User => {
-    const passedUser = makeUser(user)
+    const passedUser = makeUser(user, VALIDATOR_SCENARIOS.CREATE_USER)
     const newUser = new User();
     newUser.id = undefined
     newUser.names = passedUser.names

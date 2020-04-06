@@ -1,5 +1,5 @@
 
-import { userDatabase } from '@data/mysql'
+import { userDatabase } from '@data/database'
 
 export { userDatabase }
 

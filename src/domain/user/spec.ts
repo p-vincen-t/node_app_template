@@ -2,7 +2,7 @@ import chai from 'chai';
 
 let expect = chai.expect;
 
-import makeUser, { UserType } from '@domain/user'
+import makeUser, { UserType, VALIDATOR_SCENARIOS } from '@domain/user'
 
 describe('makeUser', () => {
   it('throws error if invalid payload', () => {
@@ -22,13 +22,13 @@ describe('makeUser', () => {
     }
 
     expect(() => {
-      makeUser(user)
+      makeUser(user, VALIDATOR_SCENARIOS.CREATE_USER)
     }).to.throw(errorMessage)
   })
   it('must have name', () => {
     let user = makeUser({
       names: 'howie', id: undefined, email: "", phone_number: "", admin: false
-    })
+    }, VALIDATOR_SCENARIOS.CREATE_USER)
     let input = user.names
     let actual = 'howie'
     expect(input).to.equal(actual)

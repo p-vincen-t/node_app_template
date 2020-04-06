@@ -1,22 +1,27 @@
-import UserField from '@ui/express/graphql/user'
-import graphqlHTTP from 'express-graphql'
-import { GraphQLObjectType, GraphQLSchema } from 'graphql'
-import { Router } from 'express'
+import "reflect-metadata";
+import UserResolver from "@ui/express/graphql/user";
+import { ApolloServer } from 'apollo-server-express';
+import { buildSchema, Query, Resolver } from 'type-graphql';
 
-const gqlRouter = Router()
+@Resolver()
+class HelloResolver {
+    @Query(() => String)
+    hello() {
+        return "hello"
+    }
+}
 
-const graphqlMetaData = graphqlHTTP({
-    schema: new GraphQLSchema({
-        query: new GraphQLObjectType({
-            name: 'RouteQueryType',
-            fields: {
-                user: UserField
-            }
-        })
-    }),
-    graphiql: true
-})
+const createGraphQlServer = async (app: any) => {
+    const apolloServer = new ApolloServer({
+        schema: await buildSchema({
+            resolvers: [
+                HelloResolver,
+                UserResolver
+            ]
+        }),
+        context: ({ req, res }) => ({ req, res })
+    })
+    apolloServer.applyMiddleware({ app, cors: false })
+}
 
-gqlRouter.get('gql', graphqlMetaData)
-
-export default gqlRouter
+export default createGraphQlServer
